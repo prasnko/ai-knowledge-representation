@@ -1,0 +1,31 @@
+set(auto).
+
+formula_list(usable).
+
+% "In developed countries, most children are immunized against measles by the age of 18 months, generally as part of a three-part MMR vaccine(measles,mumps and rubella)."
+
+all x (Child(x) & Administer(x,measles_vaccine) -> Administer(x,MMR)).
+
+% "The vaccination is generally not given earlier than this because children younger than 18 months usually retain antimeasles immunoglobulins transmitted from the mother during pregnancy."
+
+all x (Child(x) & Smaller(x,18) -> Retain(x,Antimeasles)).
+all x (Child(x) & Retain(x,Antimeasles)  -> -Administer(x,measles_vaccine)).
+
+
+% "A second dose is usually given to children between the ages of four and five,to increase rates of immunity."
+
+% "In developing countries where measles is highly endemic , WHO doctors recommend two doses of vaccine be given at six and nine months of age."
+
+% "The vaccine should be given whether the child is HIV-infected or not.
+
+% "Question?"
+% "How are measles vaccines administered?"
+% "Answer"
+% "all children are immunized by the age of 18 months,as part of MMR and a second dose is given to children between the ages of four and five."
+
+exists x (Child(x)&Administer(x,measles_vaccine)&
+           (Smaller(x,18) | -Administer(x,MMR)) ).
+
+
+
+end_of_list.

@@ -1,0 +1,109 @@
+----- Otter 3.3f, August 2004 -----
+The process was started by phil on Xiangyus-MacBook-Air.local,
+Tue Nov 27 19:56:04 2012
+The command was "./otter".  The process ID is 456.
+
+set(auto).
+   dependent: set(auto1).
+   dependent: set(process_input).
+   dependent: clear(print_kept).
+   dependent: clear(print_new_demod).
+   dependent: clear(print_back_demod).
+   dependent: clear(print_back_sub).
+   dependent: set(control_memory).
+   dependent: assign(max_mem, 12000).
+   dependent: assign(pick_given_ratio, 4).
+   dependent: assign(stats_level, 1).
+   dependent: assign(max_seconds, 10800).
+
+formula_list(usable).
+all x (Child(x)&Administer(x,measles_vaccine)->Administer(x,MMR)).
+all x (Child(x)&Smaller(x,18)->Retain(x,Antimeasles)).
+all x (Child(x)&Retain(x,Antimeasles)-> -Administer(x,measles_vaccine)).
+exists x (Child(x)&Administer(x,measles_vaccine)& (Smaller(x,18)| -Administer(x,MMR))).
+end_of_list.
+
+-------> usable clausifies to:
+
+list(usable).
+0 [] -Child(x)| -Administer(x,measles_vaccine)|Administer(x,MMR).
+0 [] -Child(x)| -Smaller(x,18)|Retain(x,Antimeasles).
+0 [] -Child(x)| -Retain(x,Antimeasles)| -Administer(x,measles_vaccine).
+0 [] Child($c1).
+0 [] Administer($c1,measles_vaccine).
+0 [] Smaller($c1,18)| -Administer($c1,MMR).
+end_of_list.
+
+SCAN INPUT: prop=0, horn=1, equality=0, symmetry=0, max_lits=3.
+
+This is a Horn set without equality.  The strategy will
+be hyperresolution, with satellites in sos and nuclei
+in usable.
+
+   dependent: set(hyper_res).
+   dependent: clear(order_hyper).
+
+------------> process usable:
+** KEPT (pick-wt=8): 1 [] -Child(x)| -Administer(x,measles_vaccine)|Administer(x,MMR).
+** KEPT (pick-wt=8): 2 [] -Child(x)| -Smaller(x,18)|Retain(x,Antimeasles).
+** KEPT (pick-wt=8): 3 [] -Child(x)| -Retain(x,Antimeasles)| -Administer(x,measles_vaccine).
+** KEPT (pick-wt=6): 4 [] Smaller($c1,18)| -Administer($c1,MMR).
+
+------------> process sos:
+** KEPT (pick-wt=2): 5 [] Child($c1).
+** KEPT (pick-wt=3): 6 [] Administer($c1,measles_vaccine).
+
+======= end of input processing =======
+
+=========== start of search ===========
+
+given clause #1: (wt=2) 5 [] Child($c1).
+
+given clause #2: (wt=3) 6 [] Administer($c1,measles_vaccine).
+
+given clause #3: (wt=3) 7 [hyper,6,1,5] Administer($c1,MMR).
+
+given clause #4: (wt=3) 8 [hyper,7,4] Smaller($c1,18).
+
+given clause #5: (wt=3) 9 [hyper,8,2,5] Retain($c1,Antimeasles).
+
+-----> EMPTY CLAUSE at   0.00 sec ----> 10 [hyper,9,3,5,6] $F.
+
+Length of proof is 3.  Level of proof is 3.
+
+---------------- PROOF ----------------
+
+1 [] -Child(x)| -Administer(x,measles_vaccine)|Administer(x,MMR).
+2 [] -Child(x)| -Smaller(x,18)|Retain(x,Antimeasles).
+3 [] -Child(x)| -Retain(x,Antimeasles)| -Administer(x,measles_vaccine).
+4 [] Smaller($c1,18)| -Administer($c1,MMR).
+5 [] Child($c1).
+6 [] Administer($c1,measles_vaccine).
+7 [hyper,6,1,5] Administer($c1,MMR).
+8 [hyper,7,4] Smaller($c1,18).
+9 [hyper,8,2,5] Retain($c1,Antimeasles).
+10 [hyper,9,3,5,6] $F.
+
+------------ end of proof -------------
+
+
+Search stopped by max_proofs option.
+
+============ end of search ============
+
+-------------- statistics -------------
+clauses given                  5
+clauses generated              4
+clauses kept                   9
+clauses forward subsumed       0
+clauses back subsumed          1
+Kbytes malloced              976
+
+----------- times (seconds) -----------
+user CPU time          0.00          (0 hr, 0 min, 0 sec)
+system CPU time        0.00          (0 hr, 0 min, 0 sec)
+wall-clock time        0             (0 hr, 0 min, 0 sec)
+
+That finishes the proof of the theorem.
+
+Process 456 finished Tue Nov 27 19:56:04 2012
